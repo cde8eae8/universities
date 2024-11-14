@@ -1,0 +1,54 @@
+<head>
+<script>
+let form = null;
+
+function set_info_entries(id, entries) {
+    root = document.querySelector('#' + id)
+    root.innerHTML = ''
+    for (const entry of entries) {
+        const field_name = entry[0]
+        const field_value = entry[1]
+
+    }
+}
+
+async function sendData(data) {
+    const formData = new FormData(form);
+    var object = {};
+    formData.forEach(function(value, key){
+        object[key] = value;
+    });
+    try {
+        const response = fetch("http://127.0.0.1:5000/api/info_from_link", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // Set the FormData instance as the request body
+            body: JSON.stringify(object),
+        })
+        .then(r => r.json())
+        .then((r) => {
+            console.log(r)
+        });
+    } catch (e) {
+        console.error('error', e);
+    }
+}
+
+window.onload = () => {
+    form = document.querySelector("#link_form");
+    const send = document.querySelector("#send");
+    send.addEventListener("click", sendData);
+}
+</script>
+</head>
+<body>
+    <form id="link_form">
+        <label for="link">Link</label><br>
+        <input type="text" id="link" name="link"><br>
+        <input id="send" type="button" value="Load">
+    </form>
+    <div id="program_info"> </div>
+    <div id="university_info"> </div>
+</body>
